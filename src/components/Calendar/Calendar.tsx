@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import MonthView from "../MonthView";
-import "../styles/calendar.scss";
-import { CalendarEvent } from "../Types/types";
-import DayView from "./DayView";
+import MonthView from "./views/MonthView";
+import "./styles/calendar.scss";
+import { CalendarEvent, DayEvents } from "./Types/types";
+import DayView from "./views/DayView";
 
 const eventTypes = {
     0: "standard",
@@ -47,8 +47,12 @@ const fakeEvents = [
     }
 ];
 const Calendar = () => {
-    const handleDayClick = (calendarEvent: CalendarEvent[]) => {
-        console.log(calendarEvent);
+    const [showDayView, setShowDayView] = useState(false);
+    const [selectedDayEvents, setSelectedDayEvents] = useState<DayEvents | null>(null);
+
+    const handleDayClick = (calendarEvent: DayEvents) => {
+        setSelectedDayEvents(calendarEvent);
+        setShowDayView(showDayView);
     }
     return (
         <>
@@ -57,9 +61,9 @@ const Calendar = () => {
             </div>
             <MonthView 
                 calendarEvents={fakeEvents}
-                onDayClick={(calendarEvent: CalendarEvent[]) => handleDayClick(calendarEvent)}
+                onDayClick={(calendarEvent: DayEvents) => handleDayClick(calendarEvent)}
             />
-            {false && <DayView />}
+            {showDayView && <DayView dayEvents={selectedDayEvents}/>}
         </>
     )
 }

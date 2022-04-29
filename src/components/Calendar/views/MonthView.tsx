@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { MonthModel } from "./models/calendarModels";
-import { CalendarEvent, MonthViewProps } from "./Types/types";
-import { formattedDate, getWeekdaysName, getWeekNumber, isSameMonth } from "./utils/dateUtils";
+import { MonthModel } from "../models/calendarModels";
+import { CalendarEvent, MonthViewProps } from "../Types/types";
+import { formattedDate, getWeekdaysName, getWeekNumber, isSameMonth } from "../utils/dateUtils";
 
 const MONTH_NAMES = [
     "January",
@@ -18,7 +18,7 @@ const MONTH_NAMES = [
     "December",
 ]
 
-const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons = false, locale= "en-En", onDayClick}: MonthViewProps) => {
+const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons = false, locale= "en-US", onDayClick}: MonthViewProps) => {
     const initialCurrentDate = currentDate;
     const [mappedCalendarEvents, setMappedCalendarEvents] = useState<{[key: string]: CalendarEvent[]} | null>(null);
 
@@ -34,7 +34,7 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
     const weekHeader = getWeekdaysName(locale);
     const [currentDateView, setCurrentDateView] = useState(initialCurrentDate);
     const [currentMonth, setCurrentMonth] = useState<any[][]>([]);
-    const currentMonthModel = new MonthModel(currentDateView.getMonth(), currentDateView.getFullYear(), MONTH_NAMES);
+    const currentMonthModel = new MonthModel(currentDateView.getMonth(), currentDateView.getFullYear(), locale);
 
     useEffect(() => {
         const currMonth = currentMonthModel.createMonth(currentDateView.getMonth(), currentDateView.getFullYear());
@@ -58,7 +58,7 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
         <div className="calendar-wrapper">
                 <div className="calendar-nav">
                     <button onClick={() => setCurrentDateView(new Date(currentDateView.setMonth(currentDateView.getMonth() - 1)))}>PREV</button>
-                    <h4>{currentMonthModel.getMonthName()} - {currentMonthModel.year}</h4>
+                    <h4>{currentMonthModel.getMonthNameAndYear()}</h4>
                     <button onClick={() => setCurrentDateView(new Date(currentDateView.setMonth(currentDateView.getMonth() + 1)))}>NEXT</button>
                 </div>
                 <div className="calendar">
@@ -66,7 +66,7 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
                         <div></div>
                         {
                             weekHeader.map(d => (
-                                <div className="day" key={d}>{d}</div>
+                                <div className="day-cell" key={d}>{d}</div>
                             ))
                         }
                     </div>
@@ -77,10 +77,10 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
                                 {
                                     week.map(day => (
                                         <div 
-                                            className="day"
+                                            className="day-cell"
                                             key={day.getTime()}
                                         >
-                                            <div className={isSameMonth(currentDateView, day) ? "" : "disabled-day"}>
+                                            <div className={isSameMonth(currentDateView, day) ? "dd" : "dd disabled-day"}>
                                                 <div className="day-number">{day.getDate()}</div>
                                                 <div 
                                                 className="day-content"
@@ -90,7 +90,7 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
                                                             <button 
                                                                 type="button" 
                                                                 className="transparent-btn"
-                                                                onClick={() => onDayClick(mappedCalendarEvents[formattedDate(day)])}
+                                                                onClick={() => onDayClick({ day: day, events: mappedCalendarEvents[formattedDate(day)] || []})}
                                                             >
                                                                 {
                                                                     mappedCalendarEvents[formattedDate(day)] && mappedCalendarEvents[formattedDate(day)].map(cEvent => (

@@ -1,7 +1,13 @@
-const DayView = () => {
+import { DayEvents } from "../Types/types";
+
+type DayViewProps = {
+    dayEvents: DayEvents | null;
+}
+const DayView = ({dayEvents}: DayViewProps) => {
+
     return (
         <div>
-            Day view
+            {dayEvents && dayEvents.day.toLocaleDateString()}
         </div>
     );
 }

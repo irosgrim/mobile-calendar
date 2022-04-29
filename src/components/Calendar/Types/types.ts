@@ -16,5 +16,10 @@ export type MonthViewProps = {
     calendarEvents?: CalendarEvent[];
     useEventIcons?: boolean;
     locale?: string;
-    onDayClick: (calendarEvent: CalendarEvent[]) => void;
+    onDayClick: (calendarEvents: {day: Date; events: CalendarEvent[]}) => void;
+}
+
+export  type DayEvents = {
+    day: Date;
+    events: CalendarEvent[];
 }

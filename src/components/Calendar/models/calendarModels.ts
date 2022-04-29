@@ -26,17 +26,19 @@ export class WeekOfMonth {
 }
 
 export class MonthModel implements Month {
+    private locale: string = "";
     private month: number;
     public year: number;
     public weeksOfTheMonth: Date[][] = [];
-    public monthNames: {[key: string]: string} = {}
-    public fullDate: Date | null= null;
-    constructor(month: number, year: number, monthNames?: string[]) {
+    public monthNames: {[key: string]: string} | null = {}
+    public fullDate: Date;
+    constructor(month: number, year: number, locale: string = "en-US", monthNames?: string[]) {
         this.createMonth(month, year);
         this.mapMonthNames(monthNames);
         this.month = month;
         this.year = year;
         this.fullDate = new Date(year, month + 1);
+        this.locale = locale || "en-US";
     }
 
     private mapMonthNames(monthNames: string[] | undefined) {
@@ -45,7 +47,10 @@ export class MonthModel implements Month {
                 acc[index] = curr;
                 return acc;
             }, {} as {[key: string]: string});
+        } else {
+            this.monthNames = null;
         }
+
     }
 
     createMonth (month: number, year: number) {
@@ -114,7 +119,23 @@ export class MonthModel implements Month {
     }
 
     getMonthName() {
-        return this.monthNames[this.month] || "";
+        if (this.monthNames) {
+            return this.monthNames[this.month] || ""
+        }
+        const intlMonthName = new Intl.DateTimeFormat([this.locale, "en-US"], { month: "long" }).format(new Date(this.year, this.month));
+        return intlMonthName;
+    }
+
+    getMonthNameAndYear() {
+        if (this.monthNames) {
+            return this.monthNames[this.month] + ", " + this.year || ""
+        }
+        const intlMonthName = new Intl.DateTimeFormat([this.locale, "en-US"], { month: "long", year: "numeric" }).format(new Date(this.year, this.month));
+        return intlMonthName;
+    }
+
+    getDateAsString() {
+        return new Intl.DateTimeFormat([this.locale, "sv-SE"]).format(new Date(this.year, this.month));
     }
 
 }

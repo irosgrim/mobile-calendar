@@ -27,7 +27,7 @@ $week-number-color: #888888;
     grid-template-rows: 1.5rem 1fr 1fr 1fr 1fr 1fr 1fr;
     .week-header {
         background-color: $week-header-bg;
-        .day {
+        .day-cell {
             text-align: center;
         }
     }
@@ -43,42 +43,45 @@ $week-number-color: #888888;
             border-right: $border;
             color: $week-number-color;
         }
-        .day {
+        .day-cell {
             border-right: $border;
             overflow: hidden;
-            &:not(.week-header .day):hover{
+            &:not(.week-header .day-cell):hover{
                 background-color: $day-hover-bg;
             }
             &-number {
                 text-align: center;
             }
             &-content { 
+                height: 100%;
                 button {
                     display: flex;
                     flex-direction: column;
                     text-align: left;
                     width: 100%;
+                    height: 100%;
                 }
                 .calendar-event {
                     padding: 0.2rem;
                     width: 100%;
                     min-height: 1rem;
-                    &.canceled {
-                        background-color: $canceled;
-                    }
-                    &.standard {
-                        background-color: $standard;
-                    }
-                    &.repeating {
-                        background-color: $repeating;
-                    }
-                    &.unavailable {
-                        background-color: $unavailable;
-                    }
                 }
             }
         }
     }
+}
+
+.canceled {
+    background-color: $canceled;
+}
+.standard {
+    background-color: $standard;
+}
+.repeating {
+    background-color: $repeating;
+}
+.unavailable {
+    background-color: $unavailable;
 }
 
 .disabled-day {
