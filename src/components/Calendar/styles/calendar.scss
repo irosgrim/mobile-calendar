@@ -1,0 +1,111 @@
+$border-color: #d2d2d2;
+$week-header-bg: #acacac;
+$header-height: 40px;
+$header-bg: #192e39;
+$canceled: #acacac;
+$standard: #b4d9eb;
+$repeating: green;
+$unavailable: #dfdfdf;
+$day-hover-bg: #e5ebf0;
+$calendar-nav-height: 1.4rem;
+$border: 1px solid $border-color;
+$week-number-color: #888888;
+
+.header {
+    height: $header-height;
+    background-color: $header-bg;
+}
+.calendar-wrapper {
+    margin: 0 auto 0;
+    height: calc(100vh - $header-height - $calendar-nav-height);
+}
+
+.calendar {
+    height: 100%;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1.5rem 1fr 1fr 1fr 1fr 1fr 1fr;
+    .week-header {
+        background-color: $week-header-bg;
+        .day {
+            text-align: center;
+        }
+    }
+    .week {
+        display: grid;
+        grid-template-columns: 2rem 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: auto;
+        border-top: $border;
+        .week-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-right: $border;
+            color: $week-number-color;
+        }
+        .day {
+            border-right: $border;
+            overflow: hidden;
+            &:not(.week-header .day):hover{
+                background-color: $day-hover-bg;
+            }
+            &-number {
+                text-align: center;
+            }
+            &-content { 
+                button {
+                    display: flex;
+                    flex-direction: column;
+                    text-align: left;
+                    width: 100%;
+                }
+                .calendar-event {
+                    padding: 0.2rem;
+                    width: 100%;
+                    min-height: 1rem;
+                    &.canceled {
+                        background-color: $canceled;
+                    }
+                    &.standard {
+                        background-color: $standard;
+                    }
+                    &.repeating {
+                        background-color: $repeating;
+                    }
+                    &.unavailable {
+                        background-color: $unavailable;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.disabled-day {
+    opacity: 0.5;
+}
+.day-content {
+    height: 100%;
+    width: 100%;
+    button {
+        display: block;
+    }
+}
+.transparent-btn {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    h4 {
+        margin: 0;
+        padding: 0;
+    }
+}
