@@ -74,6 +74,7 @@ const DayView = ({dayEvents, locale = "en-GB"}: DayViewProps) => {
                                                 left: index * 90 +"px",
                                                 height: (heightBasedOnDuration(x) * 40) + "px",
                                                 zIndex: 2,
+                                                backgroundColor: x.eventType === 1 ? "gray" : x.eventType === 2 ? "rgba(255, 192, 203, 0.603)" : "rgba(122, 217, 230, 0.603)",
                                             }}
                                         >
                                             {x.eventTitle}
