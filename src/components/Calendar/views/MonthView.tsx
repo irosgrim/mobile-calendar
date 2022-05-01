@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MonthModel } from "../models/calendarModels";
 import { CalendarEvent, MonthViewProps } from "../Types/types";
-import { formattedDate, getWeekdaysName, getWeekNumber, isSameMonth } from "../utils/dateUtils";
+import { formattedDate, getWeekdaysName, getWeekNumber, isSameMonth, isToday } from "../utils/dateUtils";
 
 const MONTH_NAMES = [
     "January",
@@ -77,13 +77,13 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
                                 {
                                     week.map(day => (
                                         <div 
-                                            className="day-cell"
+                                        className={isToday(day) ? "day-cell today" : "day-cell"}
                                             key={day.getTime()}
                                         >
                                             <div className={isSameMonth(currentDateView, day) ? "dd" : "dd disabled-day"}>
                                                 <div className="day-number">{day.getDate()}</div>
                                                 <div 
-                                                className="day-content"
+                                                    className="day-content"
                                                 >
                                                     {
                                                         mappedCalendarEvents && (

@@ -10,6 +10,7 @@ $day-hover-bg: #e5ebf0;
 $calendar-nav-height: 1.4rem;
 $border: 1px solid $border-color;
 $week-number-color: #888888;
+$today-bg: #e5ebf0;
 
 .header {
     height: $header-height;
@@ -19,7 +20,9 @@ $week-number-color: #888888;
     margin: 0 auto 0;
     height: calc(100vh - $header-height - $calendar-nav-height);
 }
-
+.today {
+    background-color: $today-bg;
+}
 .calendar {
     height: 100%;
     width: 100%;

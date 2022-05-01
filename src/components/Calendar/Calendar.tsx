@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import MonthView from "./views/MonthView";
 import "./styles/calendar.scss";
-import { CalendarEvent, DayEvents } from "./Types/types";
+import { ActiveView, CalendarEvent, DayEvents } from "./Types/types";
 import DayView from "./views/DayView";
 
 const eventTypes = {
@@ -16,6 +16,8 @@ const fakeEvents = [
         id: 42,
         startDate: new Date("2022-04-28"),
         endDate: new Date("2022-04-28"),
+        startTime: "10:00:00",
+        endTime: "14:00:00",
         dateRange: {
             fromDate: new Date("2022-04-10"),
             toDate: new Date("2022-05-28"),
@@ -27,6 +29,8 @@ const fakeEvents = [
         id: 43,
         startDate: new Date("2022-04-29"),
         endDate: new Date("2022-04-29"),
+        startTime: "12:00:00",
+        endTime: "16:00:00",
         dateRange: {
             fromDate: new Date("2022-04-29"),
             toDate: new Date("2022-05-20"),
@@ -38,6 +42,8 @@ const fakeEvents = [
         id: 44,
         startDate: new Date("2022-04-29"),
         endDate: new Date("2022-04-29"),
+        startTime: "12:00:00",
+        endTime: "14:30:00",
         dateRange: {
             fromDate: new Date("2022-04-29"),
             toDate: new Date("2022-05-20"),
@@ -47,23 +53,27 @@ const fakeEvents = [
     }
 ];
 const Calendar = () => {
-    const [showDayView, setShowDayView] = useState(false);
+    const [currentView, setCurrentView] = useState<ActiveView>("month");
     const [selectedDayEvents, setSelectedDayEvents] = useState<DayEvents | null>(null);
 
     const handleDayClick = (calendarEvent: DayEvents) => {
         setSelectedDayEvents(calendarEvent);
-        setShowDayView(showDayView);
+        if (currentView !== "day") {
+            setCurrentView("day");
+        }
     }
     return (
         <>
             <div className="header">
-                MONTH VIEW | WEEK VIEW
+                <button type="button" onClick={() => currentView !== "month" && setCurrentView("month")}>MONTH VIEW</button>
             </div>
-            <MonthView 
-                calendarEvents={fakeEvents}
-                onDayClick={(calendarEvent: DayEvents) => handleDayClick(calendarEvent)}
-            />
-            {showDayView && <DayView dayEvents={selectedDayEvents}/>}
+            {
+                currentView === "month" && <MonthView 
+                    calendarEvents={fakeEvents}
+                    onDayClick={(calendarEvent: DayEvents) => handleDayClick(calendarEvent)}
+                />
+            }
+            {currentView === "day" && <DayView dayEvents={selectedDayEvents}/>}
         </>
     )
 }

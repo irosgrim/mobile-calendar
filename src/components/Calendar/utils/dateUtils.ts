@@ -21,7 +21,12 @@ export const getWeekdaysName = (locale = "en-EN", type: "short" | "long" = "shor
     }
     return weekDays;
 }
-
+export const isToday = (date: Date) => {
+    const today = new Date();
+    date.setHours(0, 0, 0, 0); 
+    today.setHours(0, 0, 0, 0);
+    return date.getTime() === today.getTime();
+}
 export const isSameMonth = (baseDate: Date, currentDate: Date): boolean => {
     return baseDate.getMonth() === currentDate.getMonth() && baseDate.getFullYear() === currentDate.getFullYear();
 }
