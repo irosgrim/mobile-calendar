@@ -1,16 +1,4 @@
-$border-color: #d2d2d2;
-$week-header-bg: #acacac;
-$header-height: 40px;
-$header-bg: #192e39;
-$canceled: #acacac;
-$standard: #b4d9eb;
-$repeating: green;
-$unavailable: #dfdfdf;
-$day-hover-bg: #e5ebf0;
-$calendar-nav-height: 1.4rem;
-$border: 1px solid $border-color;
-$week-number-color: #888888;
-$today-bg: #e5ebf0;
+@import "./variables";
 
 .header {
     height: $header-height;

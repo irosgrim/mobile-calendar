@@ -6,7 +6,7 @@ class DayViewModel {
         this.dayEvents = dayEvents;
     }
 
-    generateDay() {
+    createDay() {
         const hoursOfTheDay = [];
         for (let i = 0; i < 24; i++) {
             const h = i < 10 ? "0" + i : i;

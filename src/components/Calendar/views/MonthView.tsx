@@ -1,33 +1,17 @@
 import { useEffect, useState } from "react";
 import { MonthModel } from "../models/calendarModels";
 import { CalendarEvent, MonthViewProps } from "../Types/types";
-import { formattedDate, getWeekdaysName, getWeekNumber, isSameMonth, isToday } from "../utils/dateUtils";
+import { LOCALE } from "../utils/constants";
+import { mapEventsToDay } from "../utils/dataStructures";
+import { formattedDate, getWeekdaysName, getWeekNumber, isSameMonth, isToday, eventIsLocked } from "../utils/dateUtils";
+import { handleEventStyle } from "../utils/layout";
 
-const MONTH_NAMES = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-]
-
-const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons = false, locale= "en-US", onDayClick}: MonthViewProps) => {
+const MonthView = ({currentDate = new Date(), calendarEvents = [], lockedTimes = [], useEventIcons = false, locale= LOCALE, onDayClick}: MonthViewProps) => {
     const initialCurrentDate = currentDate;
     const [mappedCalendarEvents, setMappedCalendarEvents] = useState<{[key: string]: CalendarEvent[]} | null>(null);
 
     useEffect(() => {
-        const mappedEvents = calendarEvents.reduce((acc : {[key: string]: CalendarEvent[]}, curr: CalendarEvent) => {
-            const startDate = formattedDate(curr.startDate);
-            acc[startDate] = [...(acc[startDate] || []), curr];
-            return acc;
-        }, {});
+        const mappedEvents = mapEventsToDay(calendarEvents);
         setMappedCalendarEvents(mappedEvents);
     }, [calendarEvents]);
 
@@ -41,19 +25,6 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
         setCurrentMonth(currMonth);
     }, [currentDateView]);
 
-    const handleEventStyle = (eventType: string | number) => {
-        switch (eventType) {
-            default:
-            case 0:
-                return "calendar-event standard";
-            case 1:
-                return "calendar-event repeating";
-            case 2:
-                return "calendar-event unavailable";
-            case 3:
-                return "calendar-event canceled";
-        }
-    }
     return (
         <div className="calendar-wrapper">
                 <div className="calendar-nav">
@@ -77,7 +48,7 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
                                 {
                                     week.map(day => (
                                         <div 
-                                        className={isToday(day) ? "day-cell today" : "day-cell"}
+                                            className={isToday(day) ? "day-cell today" : "day-cell"}
                                             key={day.getTime()}
                                         >
                                             <div className={isSameMonth(currentDateView, day) ? "dd" : "dd disabled-day"}>
@@ -98,7 +69,9 @@ const MonthView = ({currentDate = new Date(), calendarEvents = [], useEventIcons
                                                                             className={handleEventStyle(cEvent.eventType)}
                                                                             key={cEvent.id}
                                                                         >
-                                                                            {!useEventIcons && cEvent.eventTitle}
+                                                                            {
+                                                                                !useEventIcons && cEvent.eventTitle
+                                                                            }
                                                                         </div>
                                                                     ))
                                                                 }

@@ -52,6 +52,16 @@ const fakeEvents = [
         eventType: 0,
     }
 ];
+
+const lockedTimes = [
+    {
+        startDate: new Date("2022-04-28"),
+        endDate: new Date("2022-04-28"),
+        startTime: "06:00:00",
+        endTime: "17:30:00",
+    }
+];
+
 const Calendar = () => {
     const [currentView, setCurrentView] = useState<ActiveView>("month");
     const [selectedDayEvents, setSelectedDayEvents] = useState<DayEvents | null>(null);
@@ -65,15 +75,26 @@ const Calendar = () => {
     return (
         <>
             <div className="header">
-                <button type="button" onClick={() => currentView !== "month" && setCurrentView("month")}>MONTH VIEW</button>
+                {
+                currentView !== "month" && 
+                    <button type="button" onClick={() => setCurrentView("month")}>MONTH VIEW</button>
+                }
             </div>
             {
-                currentView === "month" && <MonthView 
-                    calendarEvents={fakeEvents}
-                    onDayClick={(calendarEvent: DayEvents) => handleDayClick(calendarEvent)}
+                currentView === "month" && 
+                    <MonthView
+                        lockedTimes={lockedTimes}
+                        calendarEvents={fakeEvents}
+                        onDayClick={(calendarEvent: DayEvents) => handleDayClick(calendarEvent)}
+                    />
+            }
+            {
+            currentView === "day" && 
+                <DayView 
+                    lockedTimes={lockedTimes}
+                    dayEvents={selectedDayEvents}
                 />
             }
-            {currentView === "day" && <DayView dayEvents={selectedDayEvents}/>}
         </>
     )
 }
